@@ -1,31 +1,67 @@
-import './App.css';
-import Person from './components/Person/Person';
+import "./App.css";
+import Person from "./components/Person/Person";
 
-import { useState } from 'react';
+import { useState } from "react";
 
 function App() {
-
-  const [people, setPeople] = useState([ /// [[], fn]
-    {name: "Mike", age: 30},
-    {name: "John", age: 20},
+  const [people, setPeople] = useState([
+    /// [[], fn]
+    { name: "Mike", age: 30, hobby: "Football", id: 1 },
+    { name: "John", age: 20, hobby: "Basketball", id: 2 },
+    { name: "Sam", age: 40, hobby: "Running", id: 3 }
   ]);
 
-  const changeName = () => {
+  const [isShow, setIsShow] = useState(false);
+
+  const changeName = (event, index) => {
     let copyPeople = [...people];
-    const person = {...people[0]};
-    person.name = "Sam";
-    copyPeople[0] = person;
+    const person = { ...people[index] };
+    person.name = event.target.value;
+    copyPeople[index] = person;
 
     setPeople(copyPeople);
   };
 
+  const increaseAge = (index) => {
+    const copyPeople = [...people];
+    const person = { ...people[index] };
+    person.age++;
+    copyPeople[index] = person;
+
+    setPeople(copyPeople);
+  };
+
+  const toggle = () => {
+    setIsShow((show) => !show)
+  };
+
   return (
-    <div className='wrapper'>
-      <button className="btn" onClick={changeName}>Change name</button>
-      <div className="App">
-        <Person name={people[0].name} age={people[0].age} />
-        <Person name={people[1].name} age={people[1].age} />
-      </div>
+    <div className="wrapper">
+      <button className="btn" onClick={toggle}>Переключить пользователей</button>
+      {
+        isShow ? (
+          <div className="App">
+
+            {
+              people.map((person, index) => {
+                return (
+                  <Person
+                    key={person.id}
+                    name={person.name}
+                    age={person.age}
+                    change={(event) => changeName(event, index)}
+                    increase={() => increaseAge(index)}
+                  >
+                    {person.hobby}
+                  </Person>
+                );
+              })
+            }
+
+
+          </div>
+        ) : null
+      }
     </div>
   );
 }
