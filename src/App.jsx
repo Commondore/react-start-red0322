@@ -2,13 +2,15 @@ import "./App.css";
 import Person from "./components/Person/Person";
 
 import { useState } from "react";
+import ToggleButton from "./components/ToggleButton/ToggleButton";
+import Counter from "./components/Counter/Counter";
 
 function App() {
   const [people, setPeople] = useState([
     /// [[], fn]
     { name: "Mike", age: 30, hobby: "Football", id: 1 },
     { name: "John", age: 20, hobby: "Basketball", id: 2 },
-    { name: "Sam", age: 40, hobby: "Running", id: 3 }
+    { name: "Sam", age: 40, hobby: "Running", id: 3 },
   ]);
 
   const [isShow, setIsShow] = useState(false);
@@ -32,36 +34,40 @@ function App() {
   };
 
   const toggle = () => {
-    setIsShow((show) => !show)
+    setIsShow((show) => !show);
+  };
+
+  const removePerson = (id) => {
+    setPeople(people.filter((person) => person.id !== id));
   };
 
   return (
     <div className="wrapper">
-      <button className="btn" onClick={toggle}>Переключить пользователей</button>
-      {
-        isShow ? (
-          <div className="App">
 
-            {
-              people.map((person, index) => {
-                return (
-                  <Person
-                    key={person.id}
-                    name={person.name}
-                    age={person.age}
-                    change={(event) => changeName(event, index)}
-                    increase={() => increaseAge(index)}
-                  >
-                    {person.hobby}
-                  </Person>
-                );
-              })
-            }
+      <ToggleButton isShow={isShow} toggle={toggle}>
+        Переключатель
+      </ToggleButton>
 
+      <Counter data={people}>Количество людей</Counter>
 
-          </div>
-        ) : null
-      }
+      {isShow ? (
+        <div className="App">
+          {people.map((person, index) => {
+            return (
+              <Person
+                key={person.id}
+                name={person.name}
+                age={person.age}
+                change={(event) => changeName(event, index)}
+                increase={() => increaseAge(index)}
+                remove={() => removePerson(person.id)}
+              >
+                {person.hobby}
+              </Person>
+            );
+          })}
+        </div>
+      ) : null}
     </div>
   );
 }

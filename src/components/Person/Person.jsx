@@ -7,7 +7,7 @@ function Person(props) { /// {name: '', age: 30, increase}
     <div className="person">
       <h2 className="title" onClick={props.increase}>{props.name}</h2>
       <input type="text" value={props.name} className="change__name" onChange={props.change} />
-      <p className="age">
+      <p className="age" onClick={props.remove}>
         Age <span>{props.age}</span>
       </p>
       <p>Hobby: {props.children}</p>
